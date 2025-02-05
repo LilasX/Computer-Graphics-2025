@@ -63,37 +63,3 @@ void deleteArray(int* array)
     delete[] array;
 }
 
-/*
- * The main function where the program starts executing.
- */
-int main()
-{
-    // Variable to store the size of the array entered by the user.
-    int size;
-    // Prompt the user to enter the array size.
-    std::cout << "Enter the size of the array: ";
-    // Read the user input for the size of the array.
-    std::cin >> size;
-
-    // Notify the user that the array is about to be created.
-    std::cout << "\nCreating the array...\n\n";
-    // Call the createArray function to allocate memory for the array.
-    int* a = createArray(size);
-
-    // Notify the user that the array is about to be initialized.
-    std::cout << "Initializing the array...\n\n";
-    initializeArray(a, size);
-
-    // Notify the user that the elements in the array are about to be displayed.
-    std::cout << "Printing the elements in the array...\n";
-    // Call the printArray function to print the contents of the array.
-    printArray(a, size);
-
-    // Notify the user that the array is about to be deleted.
-    std::cout << "Deleting the array...\n\n";
-    // Call the deleteArray function to deallocate the memory of the array.
-    deleteArray(a);
-
-    // Return 0 to indicate the successful completion of the program.
-    return 0;
-}
