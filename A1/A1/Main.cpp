@@ -1,19 +1,43 @@
 // Includes the Array.h header file for function declarations.
 #include "Array.h"
 #include "Point.h"
+#include "Triangle.h"
+#include "Driver.h"
 
 
 // Includes the input/output stream library for IO operations.
 #include <iostream>
 
 
-/*
- * The main function where the program starts executing.
- */
+
+ // The main function where the program starts executing.
+ 
 int main()
 {
-	Point p;
 
+	// ------------------------------------------------TEST AREA FOR PART 2 - TRIANGLE (point done already) OF QUESTIONS ----------------------------------------------------------
+	
+	// declare a triangle class. the function returns a triangle class. 
+	Triangle Tri = createTriangle();
+
+	//print to test coordinates of created triangle
+	Tri.print();
+
+	// testing translate function (hardcoded inputs for now) 
+	Tri.translate(0,'z');
+
+	//print to test translate function of created triangle
+	Tri.print();
+
+	//testing area of triangle 
+	std::cout << Tri.area();
+	
+	//print results
+	Tri.print();
+	
+
+	//------------------------------------------ PART 1 OF QUESTIONS + PART 2 POINTS ONLY (triangle not done), ALL FUNCTIONAL, DO NOT TOUCH (unless you see a mistake) ------------------------------------------
+	
 	// Variable to store the size of the array entered by the user.
 	int size;
 	// Prompt the user to enter the array size.
@@ -47,6 +71,7 @@ int main()
 	// variables to store direction and distance for Part 2: Points
 	int d;
 	char axis;
+	Point p;
 
 	// Prompt the user to enter distance
 	std::cout << "Enter the distance";
