@@ -23,6 +23,7 @@ Triangle::Triangle(Point* a, Point* b, Point* c)
 	vertex3->z = c->z;
 }
 
+//translation function for triangle. super simple 
 void Triangle::translate(int d, char axis)
 {
 	switch (axis)
@@ -53,6 +54,7 @@ void Triangle::translate(int d, char axis)
 	}
 }
 
+//chatgpt (delete this comment later) formula for area of 2d triangle in a 3d plane 
 double Triangle::area()
 {
 	
@@ -68,6 +70,7 @@ double Triangle::area()
 	return 0.5 * crossProductMagnitude;
 }
 
+// prints the xyz of all 3 vertices forming the triangle
 void Triangle::print()
 {
 	std::cout << vertex1->x;
