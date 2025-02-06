@@ -7,9 +7,9 @@
 
 class Point
 {
-private:
-    int x=0, y=0, z=0;
 public:
+    // x y z coords of point
+    int x = 0, y = 0, z = 0;
     //  function declaration for translation of point function
     void translate(int d, char axis);
 };
