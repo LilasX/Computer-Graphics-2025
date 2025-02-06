@@ -457,7 +457,7 @@ void Driver::menu()
 			return;
 		default:
 			// Print an error message for invalid options and prompt the user to try again.
-			std::cout << "Invalid option! Please try again!\n";
+			std::cout << "Invalid option! Please try again!\n\n";
 		}
 	}
 }
