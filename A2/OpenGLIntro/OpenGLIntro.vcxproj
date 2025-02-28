@@ -71,19 +71,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\glm;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\glm-master;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\lib-vc2022;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\glm;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\glm-master;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\lib-vc2022;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\glm;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\glm-master;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\lib-vc2022;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\glm;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\glm-master;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\lib-vc2022;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
