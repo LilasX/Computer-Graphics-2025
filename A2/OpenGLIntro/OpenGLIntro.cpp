@@ -18,8 +18,8 @@
 
 
 // Declare global variables for storing OpenGL objects:
-// VAO (Vertex Array Object), VBO (Vertex Buffer Object), and the shader program ID
-GLuint VAO, VBO, shader;
+// VAO (Vertex Array Object), VBO (Vertex Buffer Object), EBO (Element Buffer Object), and the shader program ID
+GLuint VAO, VBO, EBO, shader;
 
 // Declaration of the vertex shader source code as a constant string
 static const char* vShader =
@@ -31,6 +31,13 @@ R"glsl(
 	// Declares an input vertex attribute 'pos' that is a 3D vector (vec3) passed from the vertex buffer
 	// The location = 0 specifies that this attribute will be bound to the 0th input location
 	layout (location = 0) in vec3 pos;
+
+	// Declares an input vertex attribute 'color' that is a 3D vector (vec3) passed from the vertex buffer
+    // The location = 1 specifies that this attribute will be bound to the 1st input location
+	layout (location = 1) in vec3 color;
+
+	// Declares an output variable 'fragColor' to pass the color data to the fragment shader
+	out vec3 fragColor;
 
 	// Declares a uniform variable 'transform' that is a 4x4 matrix (mat4).
 	// This matrix will be used for transforming the vertex positions, like scaling, rotating, or translating.
@@ -44,6 +51,9 @@ R"glsl(
 		// The position is calculated by multiplying the input vertex position (pos) by the transformation matrix (transform).
 		// This transforms the vertex position to a new position in the clip space.
 		gl_Position = transform * vec4(pos, 1.0);
+
+		// Pass the color data to the fragment shader
+		fragColor = color; 
 	}
 
 // Closing the GLSL source code raw string literal
@@ -56,6 +66,9 @@ R"glsl(
 	// GLSL version declaration, specifies that this shader uses OpenGL version 330 core
 	#version 330 core
 
+	// Declare input variable 'fragColor' which receives color data from the vertex shader
+	in vec3 fragColor;
+
 	// Declares the output variable 'colour' that will hold the color value of the fragment
 	// The type 'vec4' represents a 4D vector, which corresponds to a color with RGBA components
 	// The 'out' keyword indicates that this variable will be written to as the shader's output
@@ -65,26 +78,230 @@ R"glsl(
 	void main()
 	{
 		// The 'vec4' constructor takes four components: Red, Green, Blue, Alpha (opacity)
-		// Set the fragment color to white (1.0, 1.0, 1.0) with full opacity (1.0) (for now)
-		colour = vec4(1.0, 1.0, 1.0, 1.0);
+        // Set the fragment color to the interpolated color passed from the vertex shader
+		colour = vec4(fragColor, 1.0);
 	}
 
 // Closing the GLSL source code raw string literal
 )glsl";
 
-// Function to create a triangle (for now)
-void createTriangle()
+// Initialize the transformation matrix to the identity matrix
+glm::mat4 transform = glm::mat4(1.0f);
+
+// Transformation constants
+// translation distance
+const float d = 0.0001f;
+// scale factor
+const float s = 0.0001f;
+// rotation angle in radians
+const float rotationAngle = glm::radians(30.0f);
+
+// Process Keyboard Input for transformations
+void processInput(GLFWwindow* window)
+{
+	// Track if the Q key is pressed
+	static bool isQPressed = false;
+	// Track if the E key is pressed
+	static bool isEPressed = false;
+
+	// Check if the Escape key is pressed to close the window
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		// Close the GLFW window
+		glfwSetWindowShouldClose(window, true);
+	}
+
+	// Check if the W key is pressed to translate the object up
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		// Translate up
+		transform = glm::translate(transform, glm::vec3(0.0f, d, 0.0f));
+	}
+
+	// Check if the S key is pressed to translate the object down
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		// Translate down
+		transform = glm::translate(transform, glm::vec3(0.0f, -d, 0.0f));
+	}
+
+	// Check if the A key is pressed to translate the object left
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		// Translate left
+		transform = glm::translate(transform, glm::vec3(-d, 0.0f, 0.0f));
+	}
+
+	// Check if the D key is pressed to translate the object right
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		// Translate right
+		transform = glm::translate(transform, glm::vec3(d, 0.0f, 0.0f));
+	}
+
+	// Check if the Q key is pressed to rotate the object counterclockwise
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+	{
+		// Rotate only once per key press
+		if (!isQPressed)
+		{
+			// Rotate counterclockwise
+			transform = glm::rotate(transform, rotationAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+			// Mark Q key as pressed
+			isQPressed = true;
+		}
+	}
+	else
+	{
+		// Reset Q key press status when not pressed
+		isQPressed = false;
+	}
+
+	// Check if the E key is pressed to rotate the object clockwise
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+	{
+		// Rotate only once per key press
+		if (!isEPressed)
+		{
+			// Rotate clockwise
+			transform = glm::rotate(transform, -rotationAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+			// Mark E key as pressed
+			isEPressed = true;
+		}
+	}
+	else
+	{
+		// Reset E key press status when not pressed
+		isEPressed = false;
+	}
+
+	// Check if the R key is pressed to scale the object up in the z direction
+	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+	{
+		// Scale in +z direction
+		transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f + s));
+	}
+
+	// Check if the F key is pressed to scale the object down in the z direction
+	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+	{
+		// Scale in -z direction
+		transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f - s));
+	}
+}
+
+// Function to create a pyramid
+void createPyramid()
 {
 	// Center is default (0, 0, 0) (x, y, z)
-	// Defines the vertices of the triangle in 3D space (x, y, z coordinates)
+	// Defines the vertices of the Pyramid in 3D space (x, y, z coordinates)
+
 	GLfloat vertices[] =
 	{
-		// First vertex (bottom-left)
-		-0.5f, -0.5f, 0.0f,
-		// Second vertex (bottom-right)
-		0.5f, -0.5f, 0.0f,
-		// Third vertex (top-center)
-		0.0f, 0.5f, 0.0f
+		// Positions and Colors (Each face has a unique color)
+		// Base (square) vertices, Blue-Purple Dark Gradient
+		// Bottom-left front (Index 0)
+		-0.5f, -0.5f, 0.5f,
+		// #1400ff
+		0.08f, 0.0f, 1.0f,
+
+		// Bottom-right front (Index 1)
+		0.5f, -0.5f, 0.5f,
+		// #00bfff
+		0.0f, 0.75f, 1.0f,
+
+		// Bottom-right back (Index 2)
+		0.5f, -0.5f, -0.5f,
+		// #6600ff
+		0.4f, 0.0f, 1.0f,
+
+		// Bottom-left back (Index 3)
+		-0.5f, -0.5f, -0.5f,
+		// 00b3ff
+		0.0f, 0.7f, 1.0f,
+
+
+		// Side 1 vertices, Ocean Blue Gradient
+		// Bottom-left front (Index 4)
+		-0.5f, -0.5f, 0.5f,
+		// #2e3091
+		0.18f, 0.19f, 0.57f,
+
+		// Bottom-right front (Index 5)
+		0.5f, -0.5f, 0.5f,
+		// #2e3091
+		0.18f, 0.19f, 0.57f,
+
+		// Top-center (Index 6)
+		0.0f,  0.5f, 0.0f,
+		// #1cffff
+		0.11f, 1.0f, 1.0f, 
+
+		// Side 2 vertices, Blue-Green Gradient
+		// Bottom-right front (Index 7)
+		0.5f, -0.5f, 0.5f,
+		// #0d75e6
+		0.05f, 0.46f, 0.9f,
+
+		// Bottom-right back (Index 8)
+		0.5f, -0.5f, -0.5f,
+		// #0d75e6
+		0.05f, 0.46f, 0.9f,
+
+		// Top-center (Index 9)
+		0.0f,  0.5f, 0.0f,
+		// #00ed6e
+		0.0f, 0.93f, 0.43f,
+
+		// Side 3 vertices, Blue-Purple Gradient
+		// Bottom-right back (Index 10)
+		0.5f, -0.5f, -0.5f,
+		// #8712c2
+		0.53f, 0.07f, 0.76f,
+
+		// Bottom-left back (Index 11)
+		-0.5f, -0.5f, -0.5f,
+		// #8712c2
+		0.53f, 0.07f, 0.76f,
+
+		// Top-center (Index 12)
+		0.0f,  0.5f, 0.0f,
+		// #2473fc
+		0.14f, 0.45f, 0.99f,
+
+		// Side 4 vertices, Purple-Green Gradient
+		// Bottom-left back (Index 13)
+		-0.5f, -0.5f, -0.5f,
+		// #42057d
+		0.26f, 0.02f, 0.49f,
+
+		// Bottom-left front (Index 14)
+		-0.5f, -0.5f, 0.5f,
+		// #42057d
+		0.26f, 0.02f, 0.49f,
+
+		// Top-center (Index 15)
+		0.0f,  0.5f, 0.0f,
+		// #08f59e
+		0.03f, 0.96f, 0.62f
+	};
+
+	// Define the indices for the pyramid
+	GLuint indices[] =
+	{
+		// Base of the pyramid (2 triangles to form the square)
+		0, 1, 2,
+		0, 2, 3,
+
+		// Sides of the pyramid (4 triangles)
+		// Side 1
+		4, 5, 6,
+		// Side 2
+		7, 8, 9,
+		// Side 3
+		10, 11, 12,
+		// Side 4
+		13, 14, 15
 	};
 
 	// Generates a new Vertex Array Object (VAO). 
@@ -97,23 +314,47 @@ void createTriangle()
 	// Generates a new Vertex Buffer Object (VBO), used to store the vertex data in GPU memory.
 	// The '1' indicates we are generating one VBO, and &VBO is where the generated ID will be stored.
 	glGenBuffers(1, &VBO);
+
+	// Generates a new Element Buffer Object (EBO), used to store element indices in GPU memory
+	// The '1' indicates we are generating one EBO, and &EBO is where the generated ID will be stored
+	glGenBuffers(1, &EBO);
+
 	// Binds the VBO to the current array buffer, so data can be uploaded to it.
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	// Uploads the vertex data into the VBO. `GL_STATIC_DRAW` suggests that the data will not change frequently.
+	// Uploads the vertex data into the VBO. 
+	// `GL_STATIC_DRAW` suggests that the data will not change frequently.
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// Defines the layout of the vertex data. 
+	// Bind and buffer the index data to the EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	// Upload the index data to the EBO. 
+	// `sizeof(indices)` calculates the total size of the index data in bytes, 
+	// `indices` is a pointer to the index data to be uploaded, and `GL_STATIC_DRAW` suggests that the data will not change frequently.
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// Position attribute
+	// Defines the layout of the vertex data
 	// `0` refers to the attribute location (position), `3` is the number of elements per vertex (x, y, z), 
-	// `GL_FLOAT` means the data is of type float, `GL_FALSE` indicates the data is not normalized, `0` means no padding between elements, 
-	// and `0` is the offset to the data in the buffer.
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	// Enables the vertex attribute array at location `0`, meaning it tells OpenGL to use the vertex data.
+	// `GL_FLOAT` means the data is of type float, `GL_FALSE` indicates the data is not normalized,
+	// `6 * sizeof(GLfloat)` is the stride (total size of the vertex data), and `0` is the offset to the data in the buffer
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	// Enables the vertex attribute array at location `0`
 	glEnableVertexAttribArray(0);
+
+	// Color attribute
+	// Defines the layout of the color data
+	// `1` refers to the attribute location (color), `3` is the number of elements per vertex (r, g, b),
+	// `GL_FLOAT` means the data is of type float, `GL_FALSE` indicates the data is not normalized,
+	// `6 * sizeof(GLfloat)` is the stride (total size of the vertex data), and `3 * sizeof(GLfloat)` is the offset to the color data in the buffer
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	// Enables the vertex attribute array at location `1`
+	glEnableVertexAttribArray(1);
 
 	// Unbinds the VBO, so no further changes can be made until it is bound again.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	// Unbinds the VAO after the configuration is done. This ensures subsequent rendering doesn't accidentally modify it.
+	// Unbinds the VAO after the configuration is done. 
+	// This ensures subsequent rendering doesn't accidentally modify it.
 	glBindVertexArray(0);
 }
 
@@ -299,15 +540,15 @@ int main()
 		return 1;
 	}
 
-	// If everything is set up successfully, print this message
-	std::cout << "Everything set!\n";
+	// Enable depth testing
+	glEnable(GL_DEPTH_TEST);
 
 	// Create the viewport for OpenGL rendering
 	// Set the OpenGL viewport to match the size of the window's framebuffer
 	glViewport(0, 0, bufferWidth, bufferHeight);
 
-	// Create the triangle geometry (by calling the function that sets up the vertices and buffers)
-	createTriangle();
+	// Create the pyramid geometry (by calling the function that sets up the vertices and buffers)
+	createPyramid();
 	// Compile and link the shaders into a program
 	compileShaders();
 
@@ -319,19 +560,19 @@ int main()
 		// Poll for and process user input events (keyboard, mouse, etc.)
 		glfwPollEvents();
 
-		// Clear the screen with a black color (RGBA: Red, Green, Blue, Alpha)
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		// Clear both color and depth buffers
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Clear the screen with a grey color (RGBA: Red, Green, Blue, Alpha)
+		glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
 		// Clear the color buffer (the part of memory that holds the pixel data for the window's content)
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Use the compiled shader program for rendering
 		glUseProgram(shader);
 
-		// In your main loop, before drawing the triangle:
-		// Create an identity matrix (no transformation)
-		glm::mat4 transform = glm::mat4(1.0f);
-		// Apply rotation to the transformation matrix (no rotation in this case)
-		transform = glm::rotate(transform, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); // Rotate the triangle
+		// Process input events (keyboard)
+		processInput(mainWindow);
 
 		// Get the location of the 'transform' uniform variable in the shader program
 		GLuint transformLoc = glGetUniformLocation(shader, "transform");
@@ -341,8 +582,18 @@ int main()
 
 		// Bind the Vertex Array Object (VAO) to use it for rendering
 		glBindVertexArray(VAO);
-		// Draw the triangle by using the vertex data (starting from vertex 0, drawing 3 vertices)
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		// Draw the elements (triangles) defined in the EBO using the vertex data
+		// - GL_TRIANGLES: Specifies that the mode of drawing is triangles. 
+		// Each set of three indices will form a triangle.
+		// - 18: The number of elements to be rendered. 
+		// In this case, there are 18 indices (6 triangles * 3 vertices each = 18).
+		// - GL_UNSIGNED_INT: Specifies the type of the indices in the EBO. 
+		// Here, the indices are unsigned integers.
+		// - 0: Specifies an offset in the EBO where the indices start. 
+		// Here, the offset is 0, meaning it starts from the beginning of the EBO.
+		glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
+
 		// Unbind the VAO to avoid accidental modifications
 		glBindVertexArray(0);
 
