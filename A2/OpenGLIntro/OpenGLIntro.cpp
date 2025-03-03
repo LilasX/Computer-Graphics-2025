@@ -1,3 +1,6 @@
+// Include the header file "OpenGLIntro.h" that contains declarations for functions, classes, and variables that are used in this source file
+#include "OpenGLIntro.h"
+
 // Include the C++ standard output library
 #include <iostream>
 // Include the standard I/O library for printing output to the console
@@ -14,12 +17,6 @@
 #include <glm/glm.hpp>
 // For matrix transformations like rotation
 #include <glm/gtc/matrix_transform.hpp>
-
-
-
-// Declare global variables for storing OpenGL objects:
-// VAO (Vertex Array Object), VBO (Vertex Buffer Object), EBO (Element Buffer Object), and the shader program ID
-GLuint VAO, VBO, EBO, shader;
 
 // Declaration of the vertex shader source code as a constant string
 static const char* vShader =
@@ -85,19 +82,55 @@ R"glsl(
 // Closing the GLSL source code raw string literal
 )glsl";
 
-// Initialize the transformation matrix to the identity matrix
-glm::mat4 transform = glm::mat4(1.0f);
+// Constructor for the PyramidRenderer class
+// Initializer list is used to initialize member variables
+// VAO, VBO, EBO, shader are initialized to 0
+// transform is initialized to the identity matrix
+// d is initialized to 0.0001f
+// s is initialized to 0.0001f
+// rotationAngle is initialized to 30 degrees in radians
+PyramidRenderer::PyramidRenderer() : VAO(0), VBO(0), EBO(0), shader(0), transform(glm::mat4(1.0f)), d(0.0001f), s(0.0001f), rotationAngle(glm::radians(30.0f))
+{
+	// Constructor body is empty
+}
 
-// Transformation constants
-// translation distance
-const float d = 0.0001f;
-// scale factor
-const float s = 0.0001f;
-// rotation angle in radians
-const float rotationAngle = glm::radians(30.0f);
+// Getter for the VAO (Vertex Array Object)
+// Returns the value of the member variable VAO
+GLuint PyramidRenderer::getVAO() const
+{
+	return VAO;
+}
+
+// Getter for the VBO (Vertex Buffer Object)
+// Returns the value of the member variable VBO
+GLuint PyramidRenderer::getVBO() const
+{
+	return VBO;
+}
+
+// Getter for the EBO (Element Buffer Object)
+// Returns the value of the member variable EBO
+GLuint PyramidRenderer::getEBO() const
+{
+	return EBO;
+}
+
+// Getter for the shader program
+// Returns the value of the member variable shader
+GLuint PyramidRenderer::getShader() const
+{
+	return shader;
+}
+
+// Getter for the transformation matrix
+// Returns the value of the member variable transform
+glm::mat4 PyramidRenderer::getTransform() const
+{
+	return transform;
+}
 
 // Process Keyboard Input for transformations
-void processInput(GLFWwindow* window)
+void PyramidRenderer::processInput(GLFWwindow* window)
 {
 	// Track if the Q key is pressed
 	static bool isQPressed = false;
@@ -191,7 +224,7 @@ void processInput(GLFWwindow* window)
 }
 
 // Function to create a pyramid
-void createPyramid()
+void PyramidRenderer::createPyramid()
 {
 	// Center is default (0, 0, 0) (x, y, z)
 	// Defines the vertices of the Pyramid in 3D space (x, y, z coordinates)
@@ -359,7 +392,7 @@ void createPyramid()
 }
 
 // Function to add shaders to the shader program
-void addShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
+void PyramidRenderer::addShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
 {
 	// Creates a new shader object of the type specified by `shaderType`.
 	// `shaderType` can be GL_VERTEX_SHADER or GL_FRAGMENT_SHADER.
@@ -410,7 +443,7 @@ void addShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
 }
 
 // Function to compile and link shaders into a shader program
-void compileShaders()
+void PyramidRenderer::compileShaders()
 {
 	// Create a new OpenGL shader program. 
 	// This program will hold multiple shaders (vertex and fragment).
@@ -475,6 +508,7 @@ void compileShaders()
 	}
 }
 
+// Entry point for the program
 int main()
 {
 	// Initialise GLFW
@@ -547,10 +581,13 @@ int main()
 	// Set the OpenGL viewport to match the size of the window's framebuffer
 	glViewport(0, 0, bufferWidth, bufferHeight);
 
+	// Create an instance of PyramidRenderer
+	PyramidRenderer pyramid;
+
 	// Create the pyramid geometry (by calling the function that sets up the vertices and buffers)
-	createPyramid();
+	pyramid.createPyramid();
 	// Compile and link the shaders into a program
-	compileShaders();
+	pyramid.compileShaders();
 
 	// Start the main rendering loop
 	// Continue until the window should be closed (by the user, or other system events)
@@ -569,19 +606,19 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Use the compiled shader program for rendering
-		glUseProgram(shader);
+		glUseProgram(pyramid.getShader());
 
 		// Process input events (keyboard)
-		processInput(mainWindow);
+		pyramid.processInput(mainWindow);
 
 		// Get the location of the 'transform' uniform variable in the shader program
-		GLuint transformLoc = glGetUniformLocation(shader, "transform");
+		GLuint transformLoc = glGetUniformLocation(pyramid.getShader(), "transform");
 
 		// Pass the transformation matrix to the shader (used for transforming the triangle's position)
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, &transform[0][0]);
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, &pyramid.getTransform()[0][0]);
 
 		// Bind the Vertex Array Object (VAO) to use it for rendering
-		glBindVertexArray(VAO);
+		glBindVertexArray(pyramid.getVAO());
 
 		// Draw the elements (triangles) defined in the EBO using the vertex data
 		// - GL_TRIANGLES: Specifies that the mode of drawing is triangles. 
