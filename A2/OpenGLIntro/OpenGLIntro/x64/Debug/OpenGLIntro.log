@@ -1,3 +1,4 @@
 ﻿  OpenGLIntro.cpp
-C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\OpenGLIntro\OpenGLIntro.cpp(411,24): warning C4267: '=': conversion from 'size_t' to 'GLint', possible loss of data
-  OpenGLIntro.vcxproj -> C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\OpenGLIntro\x64\Debug\OpenGLIntro.exe
+C:\Users\teesm\Documents\GitHub\Computer-Graphics-2025\A2\OpenGLIntro\OpenGLIntro.cpp(411,24): warning C4267: '=': conversion from 'size_t' to 'GLint', possible loss of data
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  OpenGLIntro.vcxproj -> C:\Users\teesm\Documents\GitHub\Computer-Graphics-2025\A2\OpenGLIntro\x64\Debug\OpenGLIntro.exe

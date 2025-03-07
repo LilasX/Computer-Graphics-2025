@@ -79,8 +79,8 @@
     <LibraryPath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\lib-vc2022;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\glm-master;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\lib-vc2022;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\lib\Release\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\glm-master;C:\Users\teesm\Documents\GitHub\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\teesm\Documents\GitHub\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\teesm\Documents\GitHub\Computer-Graphics-2025\A2\External Libs\glm-master;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\lib-vc2022;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\lib\Release\x64;C:\Users\teesm\Documents\GitHub\Computer-Graphics-2025\A2\External Libs\GLEW\lib\Release\x64;C:\Users\teesm\Documents\GitHub\Computer-Graphics-2025\A2\External Libs\GLFW\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLEW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\GLFW\include;C:\Users\nix13\Desktop\Computer-Graphics-2025\A2\External Libs\glm-master;$(IncludePath)</IncludePath>
