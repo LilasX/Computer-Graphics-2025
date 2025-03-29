@@ -614,7 +614,7 @@ int main()
 		// Get the location of the 'transform' uniform variable in the shader program
 		GLuint transformLoc = glGetUniformLocation(pyramid.getShader(), "transform");
 
-		// Pass the transformation matrix to the shader (used for transforming the triangle's position)
+		// Pass the transformation matrix to the shader (used for transforming the pyramid's position)
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, &pyramid.getTransform()[0][0]);
 
 		// Bind the Vertex Array Object (VAO) to use it for rendering
